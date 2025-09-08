@@ -1,4 +1,4 @@
 
 const CONFIG = {
-    BACKEND_URL:""
+    BACKEND_URL:"https://notekeeper-website.onrender.com/"
 }
