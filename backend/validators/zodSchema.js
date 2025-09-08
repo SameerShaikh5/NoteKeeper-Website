@@ -26,6 +26,12 @@ export const loginSchema = z.object({
 
 // ---------------------------------- Blogs schema ----------------------------------
 
+export const paginationSchema = z.object({
+    query:z.object({
+        page:z.number().optional(),
+        category: z.string().trim().max(30, "Category length can't be more than 30 characters!").transform(clean),
+    })
+})
 
 
 export const getBlogSchema = z.object({
