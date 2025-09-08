@@ -2,7 +2,7 @@ import express from "express"
 import { isLoggedIn } from "../middlewares/auth.js"
 import { createBlog, deleteBlog, getAllCategories, getBlogById, getTopicsByCategory, paginatedBlogs, updateBlog } from "../controllers/blogController.js"
 import { validateInput } from "../middlewares/validateInput.js"
-import { createBlogSchema, deleteBlogSchema, getBlogSchema, getTopicsBlogSchema, paginationSchema, updateBlogSchema } from "../validators/zodSchema.js"
+import { createBlogSchema, deleteBlogSchema, getBlogSchema, getTopicsBlogSchema, updateBlogSchema } from "../validators/zodSchema.js"
 
 const router = express.Router()
 
