@@ -95,7 +95,7 @@
       const password = document.getElementById("password").value;
 
       try {
-        let response = await fetch("http://localhost:5000/users/register", {
+        let response = await fetch(`${CONFIG.BACKEND_URL}/users/register`, {
           method: "POST",
           credentials:"include",
           headers: {

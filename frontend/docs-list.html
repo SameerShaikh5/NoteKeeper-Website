@@ -67,7 +67,7 @@
   document.addEventListener("DOMContentLoaded", async () => {
     try {
       // Fetch categories from backend
-      let response = await fetch("http://localhost:5000/blogs/categories", {
+      let response = await fetch(`${CONFIG.BACKEND_URL}/blogs/categories`, {
         method: "GET",
         credentials: "include"
       });

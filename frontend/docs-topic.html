@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Fetch blogs by category & page
-    let response = await fetch(`http://localhost:5000/blogs?category=${encodeURIComponent(category)}&page=${page}`, {
+    let response = await fetch(`${CONFIG.BACKEND_URL}/blogs?category=${encodeURIComponent(category)}&page=${page}`, {
       method: "GET",
       credentials: "include"
     });
