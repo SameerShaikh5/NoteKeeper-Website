@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,76 +8,189 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- highlight js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" rel="stylesheet">
+
+
 </head>
+
 <body>
+
   <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
-        <div class="container">
-            <!-- Logo -->
-            <a class="navbar-brand fw-bold logo-text" href="#">Notekeeper</a>
-
-            <!-- Toggle Button for Mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Links + Search -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Docs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Add Content</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Signup</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-                </ul>
-
-                <!-- Searchbar -->
-                <form class="d-flex ms-lg-3 mt-2 mt-lg-0" role="search">
-                    <input class="form-control search-input" type="search" placeholder="Search..." aria-label="Search">
-                    <button class="btn search-btn ms-2 border rounded" type="submit">Go</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold logo-text" href="/">Notekeeper</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/docs-list.html">Docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="/add-topic.html">Add Topic</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signup.html">Signup</a></li>
+          <li class="nav-item"><a class="nav-link" href="/login.html">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
   <!-- Sidebar + Content -->
   <div class="docs-container">
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
       <h4>Topics</h4>
-      <ul>
-        <li><a href="#" class="active">React</a></li>
-        <li><a href="#">Node.js</a></li>
-        <li><a href="#">MongoDB</a></li>
-        <li><a href="#">Express.js</a></li>
-      </ul>
+      <ul id="categoryList"></ul>
     </div>
 
     <!-- Main Content -->
-    <div class="content w-25">
+    <div class="content w-75">
       <button class="btn btn-primary btn-sm d-lg-none mb-3" id="toggleSidebar">☰ Menu</button>
-      
+
       <!-- Top section with delete button -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">React Basics</h2>
-        <button class="btn btn-danger btn-sm">Delete</button>
+        <h2 id="blogTitle" class="mb-0"></h2>
+        <button id="deleteBtn" class="btn btn-danger btn-sm">Delete</button>
       </div>
 
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel sapien eget nunc tempor facilisis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, exercitationem voluptatem? Vitae laboriosam animi asperiores nemo obcaecati, fugiat sapiente assumenda cum autem dignissimos, excepturi est corrupti non repellendus aperiam sequi vel omnis deleniti laborum dolorum quis deserunt! Praesentium, explicabo sint!</p>
-      
-      <h2>Node.js Middleware</h2>
-      <p>Aliquam erat volutpat. Sed nec tincidunt nibh. Nullam eget luctus libero.</p>
+      <p id="blogContent"></p>
 
-      <div class="d-flex justify-content-between">
-        <a href=""><button class="btn btn-primary btn-sm">Prev</button></a>
-        <a href=""><button class="btn btn-primary btn-sm">Next</button></a>
+      <div class="d-flex justify-content-between mt-4">
+        <a href="" id="prevLink"><button class="btn btn-primary btn-sm">Prev</button></a>
+        <a href="" id="nextLink"><button class="btn btn-primary btn-sm">Next</button></a>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="script.js"></script>
+  <script>
+    (async function loadBlog() {
+      try {
+        // Extract blog ID from URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const blogId = urlParams.get("id");
+
+        if (!blogId) {
+          console.error("No blog ID found in URL");
+          return;
+        }
+
+        // Fetch blog details
+        const blogRes = await fetch(`http://localhost:5000/blogs/blog/${blogId}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!blogRes.ok) throw new Error("Failed to fetch blog");
+        const blogData = await blogRes.json();
+        const blog = blogData.data;
+
+        // Update title and content
+        document.querySelector("#blogTitle").innerText = blog.topic;
+        document.querySelector("#blogContent").innerHTML = blog.content;
+
+        // Add hljs class to Quill’s code blocks so the theme applies
+        document.querySelectorAll("pre.ql-syntax").forEach(block => {
+          block.classList.add("hljs");
+          block.classList.add("p-2");
+        });
+
+        // Now re-run highlight.js (in case some didn’t get spans)
+        hljs.highlightAll();
+
+
+        // Update delete button with blog id
+        const deleteBtn = document.querySelector("#deleteBtn");
+        deleteBtn.setAttribute("data-id", blog._id);
+
+        // ✅ Delete functionality
+        deleteBtn.addEventListener("click", async () => {
+          if (!confirm("Are you sure you want to delete this blog?")) return;
+
+          try {
+            const res = await fetch(`http://localhost:5000/blogs/delete/${blogId}`, {
+              method: "DELETE",
+              credentials: "include",
+            });
+
+            if (!res.ok) throw new Error("Failed to delete blog");
+            alert("Blog deleted successfully!");
+            window.location.href = "/docs-list.html";
+          } catch (err) {
+            console.error("Delete error:", err);
+            alert("Error deleting blog");
+          }
+        });
+
+        // Fetch topics for sidebar
+        const topicsRes = await fetch(`http://localhost:5000/blogs/topics/${blogId}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!topicsRes.ok) throw new Error("Failed to fetch topics");
+        const topicsData = await topicsRes.json();
+        const topics = topicsData.data;
+
+        // Sidebar update
+        const categoryName = document.querySelector("#sidebar h4");
+        categoryName.innerText = blog.category;
+
+        const sidebar = document.querySelector("#categoryList");
+        sidebar.innerHTML = "";
+
+        let currentIndex = -1;
+
+        topics.forEach((topic, index) => {
+          const li = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = `/doc.html?id=${topic._id}`;
+          link.textContent = `${topic.serialNo}.${topic.topic}`;
+          link.classList.add("d-block", "py-1", "text-decoration-none");
+
+          // highlight active topic
+          if (topic._id === blogId) {
+            link.classList.add("active",);
+            currentIndex = index;
+          }
+
+          li.appendChild(link);
+          sidebar.appendChild(li);
+        });
+
+        // Setup Prev and Next links
+        const prevLink = document.querySelector("#prevLink");
+        const nextLink = document.querySelector("#nextLink");
+
+        if (currentIndex > 0) {
+          prevLink.href = `/doc.html?id=${topics[currentIndex - 1]._id}`;
+        } else {
+          prevLink.classList.add("disabled");
+        }
+
+        if (currentIndex < topics.length - 1) {
+          nextLink.href = `/doc.html?id=${topics[currentIndex + 1]._id}`;
+        } else {
+          nextLink.classList.add("disabled");
+        }
+
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    })();
+  </script>
+
+
+
 </body>
+
 </html>
