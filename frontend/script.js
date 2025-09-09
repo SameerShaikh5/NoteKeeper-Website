@@ -10,20 +10,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  document.addEventListener("click", function (e) {
-    if (
-      sidebar.classList.contains("active") && 
-      !sidebar.contains(e.target) && 
-      e.target !== toggleBtn
-    ) {
-      sidebar.classList.remove("active");
-    }
-  })
+  if (sidebar) {
+    document.addEventListener("click", function (e) {
+      if (
+        sidebar.classList.contains("active") &&
+        !sidebar.contains(e.target) &&
+        e.target !== toggleBtn
+      ) {
+        sidebar.classList.remove("active");
+      }
+    })
+  }
 
   // Show new category input
-    const categorySelect = document.getElementById("category");
-    const newCategoryInput = document.getElementById("newCategory");
+  const categorySelect = document.getElementById("category");
+  const newCategoryInput = document.getElementById("newCategory");
 
+  if(categorySelect){
     categorySelect.addEventListener("change", () => {
       if (categorySelect.value === "add-new") {
         newCategoryInput.classList.remove("d-none");
@@ -33,8 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
         newCategoryInput.required = false;
       }
     });
-    
-  
+  }
+
+
+
 });
 
 
