@@ -11,14 +11,14 @@ const cleanSanitize = (input) => sanitize(input)
 export const registerSchema = z.object({
     body: z.object({
         name: z.string().trim().transform(clean),
-        email: z.string().trim().transform(clean),
+        email: z.string().trim().toLowerCase().transform(clean),
         password: z.string().trim().transform(clean)
     })
 })
 
 export const loginSchema = z.object({
     body: z.object({
-        email: z.string().trim().transform(clean),
+        email: z.string().trim().toLowerCase().transform(clean),
         password: z.string().trim().transform(clean)
     })
 })
