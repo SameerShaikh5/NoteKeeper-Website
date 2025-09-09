@@ -63,10 +63,7 @@
           <label for="category" class="form-label">Category</label>
           <select class="form-select" id="category" required>
             <option value="" disabled selected>Select category</option>
-            <option value="React">React</option>
             <option value="Node.js">Node.js</option>
-            <option value="MongoDB">MongoDB</option>
-            <option value="Express">Express</option>
             <option value="add-new">+ Add another category</option>
           </select>
           <input type="text" class="form-control mt-2 d-none" id="newCategory" placeholder="Enter new category">
@@ -133,18 +130,56 @@
 
     // Initialize Quill
     var quill = new Quill('#content', {
-    theme: 'snow',
-    modules: {
-      syntax: true, // ✅ simpler, let Quill use hljs directly
-      toolbar: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline'],
-        ['link', 'blockquote', 'code-block'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['clean']
-      ]
-    }
-  });
+      theme: 'snow',
+      modules: {
+        syntax: true, // ✅ simpler, let Quill use hljs directly
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline'],
+          ['link', 'blockquote', 'code-block'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['clean']
+        ]
+      }
+    });
+
+    // categories fetching
+    document.addEventListener("DOMContentLoaded", async () => {
+      const categorySelect = document.getElementById("category");
+
+      try {
+        const res = await fetch(`${CONFIG.BACKEND_URL}/blogs/categories`, {
+          method: "GET",
+          credentials: "include" // required for cookies/session
+        });
+
+        const data = await res.json();
+
+        if (data.success && Array.isArray(data.categories)) {
+          // Clear existing options (keep "Select category" + add-new option later)
+          categorySelect.innerHTML = `
+        <option value="" disabled selected>Select category</option>
+      `;
+
+          // Add categories from backend
+          data.categories.forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat;
+            option.textContent = cat;
+            categorySelect.appendChild(option);
+          });
+
+          // Add "+ Add another category" option
+          const addNewOption = document.createElement("option");
+          addNewOption.value = "add-new";
+          addNewOption.textContent = "+ Add another category";
+          categorySelect.appendChild(addNewOption);
+        }
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    });
+
 
     document.getElementById("add-topic").addEventListener("submit", async (e) => {
       e.preventDefault();
