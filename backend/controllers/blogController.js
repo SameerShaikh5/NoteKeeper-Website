@@ -136,7 +136,7 @@ export const getTopicsByCategory = TryCatch(
         }
 
         const topics = await Blog.find({authorId:req.user._id, category:blog.category}).sort({ createdAt:1}).select("_id topic").lean()
-
+``
         return res.status(200).json({
             success:true,
             message:"Blogs fetched successfully!",
