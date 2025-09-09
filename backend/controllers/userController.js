@@ -25,8 +25,9 @@ export const registerUser = TryCatch(async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    sameSite: "none",   // not None
-    secure: true
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
   });
 
   return res.status(201).json({
@@ -60,8 +61,9 @@ export const loginUser = TryCatch(async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    sameSite: "none",   // not None
-    secure: true
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
   });
 
   return res.status(200).json({
@@ -73,32 +75,34 @@ export const loginUser = TryCatch(async (req, res, next) => {
 
 // logout user
 export const logoutUser = TryCatch(async (req, res, next) => {
-    // Clear the token cookie
-    res.clearCookie("token", {
-        httpOnly: true,      // safest option
-        secure: process.env.NODE_ENV === "production", // only send over HTTPS in production
-        sameSite: "lax"      // helps prevent CSRF attacks
-    });
+  // Clear the token cookie
+  res.clearCookie("token", {
+    httpOnly: true,      // safest option
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
 
-    return res.status(200).json({
-        success: true,
-        message: "Logged out successfully!"
-    });
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully!"
+  });
 });
 
 
 export const verifyLoggedIn = TryCatch(async (req, res, next) => {
-    if (req.cookies.token) {
-        return res.status(200).json({
-            success: true,
-            message: "Logged in",
-            loggedIn: true
-        });
-    } else {
-        return res.status(401).json({
-            success: false,
-            message: "Not logged in",
-            loggedIn: false
-        });
-    }
+  if (req.cookies.token) {
+    return res.status(200).json({
+      success: true,
+      message: "Logged in",
+      loggedIn: true
+    });
+  } else {
+    return res.status(401).json({
+      success: false,
+      message: "Not logged in",
+      loggedIn: false
+    });
+  }
 });
