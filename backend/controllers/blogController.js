@@ -135,7 +135,7 @@ export const getTopicsByCategory = TryCatch(
             return next(new ErrorHandler("Blog not found!", 404))
         }
 
-        const topics = await Blog.find({authorId:req.user._id, category:blog.category}).sort({ createdAt:-1}).select("_id topic").lean()
+        const topics = await Blog.find({authorId:req.user._id, category:blog.category}).sort({ createdAt:1}).select("_id topic").lean()
 
         return res.status(200).json({
             success:true,
