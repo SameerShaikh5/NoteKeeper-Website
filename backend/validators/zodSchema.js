@@ -12,14 +12,14 @@ export const registerSchema = z.object({
     body: z.object({
         name: z.string().trim().transform(clean),
         email: z.string().trim().toLowerCase().transform(clean),
-        password: z.string().trim().transform(clean)
+        password: z.string().trim().transform(clean).min(8, "Password must be atleast 8 characters long!").max(64, "Password length must be less than 64 characters!")
     })
 })
 
 export const loginSchema = z.object({
     body: z.object({
         email: z.string().trim().toLowerCase().transform(clean),
-        password: z.string().trim().transform(clean)
+        password: z.string().trim().transform(clean).min(8, "Password must be atleast 8 characters long!").max(64, "Password length must be less than 64 characters!")
     })
 })
 
