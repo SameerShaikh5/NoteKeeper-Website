@@ -25,8 +25,8 @@ export const registerUser = TryCatch(async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    sameSite: "lax",   // not None
-    secure: false
+    sameSite: "none",   // not None
+    secure: true
   });
 
   return res.status(201).json({
@@ -60,8 +60,8 @@ export const loginUser = TryCatch(async (req, res, next) => {
   res.cookie("token", token, {
     httpOnly: true,
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    sameSite: "lax",   // not None
-    secure: false
+    sameSite: "none",   // not None
+    secure: true
   });
 
   return res.status(200).json({
