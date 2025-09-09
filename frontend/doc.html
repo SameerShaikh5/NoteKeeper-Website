@@ -48,12 +48,15 @@
     <div class="content w-75">
       <button class="btn btn-primary btn-sm d-lg-none mb-3" id="toggleSidebar">☰ Menu</button>
 
-      <!-- Top section with delete button -->
+      <!-- Top section with update + delete buttons -->
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 id="blogTitle" class="mb-0"></h2>
-        <button id="updateBtn" class="btn btn-warning btn-sm">Update</button>
-        <button id="deleteBtn" class="btn btn-danger btn-sm">Delete</button>
+        <div class="d-flex gap-2">
+          <button id="updateBtn" class="btn btn-warning btn-sm">Update</button>
+          <button id="deleteBtn" class="btn btn-danger btn-sm">Delete</button>
+        </div>
       </div>
+
 
       <p id="blogContent"></p>
 
