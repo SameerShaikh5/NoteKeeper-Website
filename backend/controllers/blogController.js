@@ -135,7 +135,7 @@ export const getTopicsByCategory = TryCatch(
             return next(new ErrorHandler("Blog not found!", 404))
         }
 
-        const topics = await Blog.find({authorId:req.user._id, category:blog.category}).sort({ updatedAt:1}).select("_id topic").lean()
+        const topics = await Blog.find({authorId:req.user._id, category:blog.category}).sort({ createdAt:-1}).select("_id topic").lean()
 
         return res.status(200).json({
             success:true,
@@ -150,9 +150,9 @@ export const getTopicsByCategory = TryCatch(
 export const getAllCategories = TryCatch(
   async (req, res, next) => {
       // Get unique categories from Blog collection
-      const blogs = await Blog.find({authorId:req.user._id}).distinct("category")
+      const categories = await Blog.find({authorId:req.user._id}).distinct("category")
 
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         categories,
       });
