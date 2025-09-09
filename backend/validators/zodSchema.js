@@ -58,7 +58,7 @@ export const updateBlogSchema = z.object({
         topic: z.string().trim().max(60, "Topic name can't be more than 50 characters!").optional(),
         category: z.string().trim().max(30, "Category length can't be more than 30 characters!").optional(),
         content: z.string().trim().transform(cleanSanitize).optional(),
-        tags: z.array().max(10).optional()
+        tags: z.array(z.string().trim()).max(10).optional()
     })
 })
 
