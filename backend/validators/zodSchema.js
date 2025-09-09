@@ -75,9 +75,5 @@ export const getTopicsBlogSchema = z.object({
     })
 })
 
-export const getAllCategoriesSchema = z.object({
-    params: z.object({
-        id: z.string().trim().transform(clean)
-    })
-})
+
 

@@ -25,7 +25,7 @@ router.delete("/delete/:id", isLoggedIn,validateInput(deleteBlogSchema), deleteB
 router.get("/topics/:id", isLoggedIn, validateInput(getTopicsBlogSchema), getTopicsByCategory)
 
 // get all catgories
-router.get("/categories", isLoggedIn,validateInput(), getAllCategories)
+router.get("/categories", isLoggedIn, getAllCategories)
 
 const blogRouter = router
 
