@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Fetch login status
-    const res = await fetch("http://localhost:5000/users/verifyLogin", {
+    const res = await fetch(`${CONFIG.BACKEND_URL}/users/verifyLogin`, {
       method: "GET",
       credentials: "include" // important to send cookies
     });
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("logoutLink").addEventListener("click", async (e) => {
         e.preventDefault();
         try {
-          const logoutRes = await fetch("http://localhost:5000/users/logout", {
+          const logoutRes = await fetch(`${CONFIG.BACKEND_URL}/users/logout`, {
             method: "GET",
             credentials: "include"
           });
