@@ -134,6 +134,7 @@
       modules: {
         syntax: true, // ✅ simpler, let Quill use hljs directly
         toolbar: [
+          [{ size: ["small", "medium", "large", "huge"] }],
           [{ header: [1, 2, 3, false] }],
           ['bold', 'italic', 'underline'],
           ['link', 'blockquote', 'code-block'],
@@ -142,6 +143,8 @@
         ]
       }
     });
+    Size.whitelist = ["12px", "16px", "20px", "24px"];
+
 
     // categories fetching
     document.addEventListener("DOMContentLoaded", async () => {
